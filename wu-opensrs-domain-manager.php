@@ -1,13 +1,13 @@
 <?php
 /**
- * Plugin Name: Ultimate Multisite - OpenSRS Domain Manager
- * Description: Start selling and managing domains through your OpenSRS Reseller Account on the Ultimate Multisite WaaS for WordPress Multisite. OpenSRS domain registration and management addon for Ultimate Multisite
- * Plugin URI: https://ultimatemultisite.com/shop/opensrs-domain-manager/
+ * Plugin Name: Ultimate Multisite - Domain Manager
+ * Description: Start selling and managing domains through your Ultimate Multisite WaaS for WordPress Multisite.
+ * Plugin URI: https://ultimatemultisite.com/shop/domain-manager/
  * Text Domain: ultimate-multisite
  * Version: 1.0.2
  * Author: Ultimate Multisite Community
- * Author URI: https://boofolaworks.com/wp-plugins/opensrs-domain-manager
- * GitHub Plugin URI: https://github.com/Boofola/opensrs-domain-manager
+ * Author URI: https://boofolaworks.com/wp-plugins/domain-manager
+ * GitHub Plugin URI: https://github.com/Boofola/domain-manager
  * Network: true
  * License: GNU GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -15,9 +15,9 @@
  * Requires at least: 5.3
  * Requires PHP: 7.4.30
  *
- * OpenSRS Domain Manager for Ultimate Multisite is distributed under the terms of the GNU GPLv2 License.
+ * Domain Manager for Ultimate Multisite is distributed under the terms of the GNU GPLv2 License.
  *
- * OpenSRS Domain Manager for Ultimate Multisite is only available with a paid license.
+ * Domain Manager for Ultimate Multisite is only available with a paid license.
  * This plugin is distributed WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU GPLv2 for more details.
@@ -28,7 +28,7 @@
  *
  * @author   Arindo Duque, NextPress, and the Ultimate Multisite Community
  * @category Add-On
- * @package  WU_OpenSRS
+ * @package  WU_Domain_Manager
  * @version 1.0.2
  */
 

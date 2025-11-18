@@ -61,3 +61,22 @@ jQuery(document).ready(function($) {
 		}
 	});
 });
+
+// Handle auto-renew toggle
+$('.wu-toggle-auto-renew').on('change', function() {
+	var checkbox = $(this);
+	var domainId = checkbox.data('domain-id');
+	var enabled = checkbox.is(':checked');
+	
+	$.post(ajaxurl, {
+		action: 'wu_toggle_auto_renew',
+		domain_id: domainId,
+		enabled: enabled ? 1 : 0,
+		nonce: '<?php echo wp_create_nonce( "wu-domain-management" ); ?>'
+	}, function(response) {
+		if (!response.success) {
+			checkbox.prop('checked', !enabled);
+			alert('<?php esc_html_e( "Error updating auto-renewal setting", "wu-opensrs" ); ?>');
+		}
+	});
+});
