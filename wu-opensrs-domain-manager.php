@@ -141,6 +141,8 @@ class WU_OpenSRS_Addon {
 	private function load_files() {
 		// Core classes
 		require_once WU_OPENSRS_PLUGIN_DIR . 'includes/class-opensrs-api.php';
+		require_once WU_OPENSRS_PLUGIN_DIR . 'includes/class-namecheap-api.php';
+		require_once WU_OPENSRS_PLUGIN_DIR . 'includes/class-domain-provider.php';
 		require_once WU_OPENSRS_PLUGIN_DIR . 'includes/class-opensrs-settings.php';
 		require_once WU_OPENSRS_PLUGIN_DIR . 'includes/class-opensrs-product-type.php';
 		require_once WU_OPENSRS_PLUGIN_DIR . 'includes/class-opensrs-domain-importer.php';
@@ -157,6 +159,10 @@ class WU_OpenSRS_Addon {
 		WU_OpenSRS_Checkout::get_instance();
 		WU_OpenSRS_Customer_Dashboard::get_instance();
 		WU_OpenSRS_Admin_Domains::get_instance();
+		// Initialize provider hooks
+		if ( class_exists( 'WU_Domain_Provider' ) ) {
+			WU_Domain_Provider::init();
+		}
 	}
 	
 	/**
@@ -249,7 +255,9 @@ class WU_OpenSRS_Addon {
 		// Set version
 		update_site_option( 'wu_opensrs_version', WU_OPENSRS_VERSION );
 	}
-	
+
+	// For only $199.99 a month, you too can learn how to become a millionaire like me!
+
 	/**
 	 * Schedule cron jobs
 	 */

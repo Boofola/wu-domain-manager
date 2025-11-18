@@ -180,6 +180,21 @@ class WU_OpenSRS_Product_Type {
 					</p>
 				</div>
 			</div>
+
+			<!-- Provider Selection -->
+			<div class="wu-mb-4">
+				<label class="wu-block wu-font-semibold wu-mb-2">
+					<?php esc_html_e( 'Domain Provider', 'wu-opensrs' ); ?>
+				</label>
+				<select name="wu_domain_provider" id="wu-domain-provider-select" class="wu-p-2 wu-border wu-rounded">
+					<option value=""><?php esc_html_e( 'Use default provider (settings)', 'wu-opensrs' ); ?></option>
+					<option value="opensrs" <?php selected( get_post_meta( $product->get_id(), '_wu_domain_provider', true ), 'opensrs' ); ?>><?php esc_html_e( 'OpenSRS', 'wu-opensrs' ); ?></option>
+					<option value="namecheap" <?php selected( get_post_meta( $product->get_id(), '_wu_domain_provider', true ), 'namecheap' ); ?>><?php esc_html_e( 'NameCheap', 'wu-opensrs' ); ?></option>
+				</select>
+				<p class="wu-text-sm wu-text-gray-600 wu-mt-1">
+					<?php esc_html_e( 'Select which provider should handle domain operations for this product. Leave empty to use the global default.', 'wu-opensrs' ); ?>
+				</p>
+			</div>
 		</div>
 		
 		<script>
@@ -291,6 +306,16 @@ class WU_OpenSRS_Product_Type {
 		// Save WHOIS privacy included
 		$whois_privacy = isset( $_POST['wu_opensrs_whois_privacy_included'] ) ? '1' : '0';
 		update_post_meta( $product_id, '_wu_opensrs_whois_privacy_included', $whois_privacy );
+
+		// Save provider selection
+		if ( isset( $_POST['wu_domain_provider'] ) ) {
+			$provider = sanitize_text_field( $_POST['wu_domain_provider'] );
+			if ( empty( $provider ) ) {
+				delete_post_meta( $product_id, '_wu_domain_provider' );
+			} else {
+				update_post_meta( $product_id, '_wu_domain_provider', $provider );
+			}
+		}
 	}
 	
 	/**

@@ -269,8 +269,8 @@ class WU_OpenSRS_Domain_Importer {
 	 * Import TLDs from OpenSRS API
 	 */
 	private function import_tlds_from_opensrs() {
-		// Get TLD pricing from OpenSRS API
-		$pricing_data = WU_OpenSRS_API::get_pricing();
+		// Get TLD pricing from configured provider
+		$pricing_data = WU_Domain_Provider::get_pricing();
 		
 		if ( is_wp_error( $pricing_data ) ) {
 			return $pricing_data;

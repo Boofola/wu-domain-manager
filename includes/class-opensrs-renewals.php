@@ -46,8 +46,8 @@ class WU_OpenSRS_Renewals {
 		);
 		
 		foreach ( $domains as $domain ) {
-			// Get domain info from OpenSRS
-			$info = WU_OpenSRS_API::get_domain_info( $domain->domain_name );
+			// Get domain info from configured provider
+			$info = WU_Domain_Provider::get_domain_info( $domain->domain_name );
 			
 			if ( is_wp_error( $info ) ) {
 				error_log( sprintf(

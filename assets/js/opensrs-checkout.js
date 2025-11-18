@@ -16,10 +16,14 @@ jQuery(document).ready(function($) {
 		$('#wu-opensrs-result').html('<div class="wu-alert wu-alert-info">' + wu_opensrs.checking + '</div>');
 		$('#wu-opensrs-check-btn').prop('disabled', true);
 		
+		var productId = $('#wu-opensrs-product-id').val() || '';
+		var productProvider = $('#wu-opensrs-product-provider').val() || '';
+
 		$.post(wu_opensrs.ajax_url, {
 			action: 'wu_opensrs_check_domain',
 			domain: domain,
 			tld: tld,
+			product_id: productId,
 			nonce: wu_opensrs.nonce
 		}, function(response) {
 			checking = false;
@@ -53,6 +57,56 @@ jQuery(document).ready(function($) {
 			);
 		});
 	});
+
+	// Validate contact fields client-side when provider is NameCheap
+	$('#wu-opensrs-check-btn').on('click', function() {
+		var provider = $('#wu-opensrs-product-provider').val() || '';
+		if (provider === 'namecheap') {
+			var required = ['domain_contact[first_name]', 'domain_contact[last_name]', 'domain_contact[email]', 'domain_contact[phone]', 'domain_contact[addr1]', 'domain_contact[city]', 'domain_contact[postal_code]', 'domain_contact[country]'];
+			var missing = [];
+			required.forEach(function(name) {
+				var el = $('input[name="' + name + '"]');
+				if (!el.length || !el.val().trim()) {
+					missing.push(name);
+				}
+			});
+			if (missing.length) {
+				alert(wu_opensrs.contact_required || 'Please complete the registrant contact details to proceed with registration.');
+				return;
+			}
+		}
+	});
+
+	// Prevent final form submission if NameCheap contact fields are missing
+	var checkoutForm = $('#wu-opensrs-domain-widget').closest('form');
+	if (checkoutForm.length) {
+		checkoutForm.on('submit', function(e) {
+			var provider = $('#wu-opensrs-product-provider').val() || '';
+			if (provider === 'namecheap') {
+				var required = ['domain_contact[first_name]', 'domain_contact[last_name]', 'domain_contact[email]', 'domain_contact[phone]', 'domain_contact[addr1]', 'domain_contact[city]', 'domain_contact[postal_code]', 'domain_contact[country]'];
+				var missing = [];
+				required.forEach(function(name) {
+					var el = $('input[name="' + name + '"]');
+					if (!el.length || !el.val().trim()) {
+						missing.push(name);
+					}
+				});
+				if (missing.length) {
+					e.preventDefault();
+					alert(wu_opensrs.contact_required || 'Please complete the registrant contact details to proceed with registration.');
+					// Optionally focus the first missing field
+					var first = $('input[name="' + missing[0] + '"]');
+					if (first.length) first.focus();
+					return false;
+				}
+			}
+		});
+	}
+
+	// Show an alert if server redirected back with missing contact error
+	if (window.location.search.indexOf('wu_domain_error=missing_contact') !== -1) {
+		alert(wu_opensrs.contact_required || 'Please complete the registrant contact details to proceed with registration.');
+	}
 	
 	$('#wu-opensrs-domain-search').on('keypress', function(e) {
 		if (e.which === 13) {
