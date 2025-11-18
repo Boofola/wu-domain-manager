@@ -150,14 +150,36 @@ class WU_OpenSRS_Addon {
 		// Load required files
 		$this->load_files();
 
-		// Show a migration notice in network admin to highlight changed filenames
-		if ( current_user_can( 'manage_network' ) ) {
-			add_action( 'network_admin_notices', array( $this, 'migration_admin_notice' ) );
+		// Perform a one-time cleanup of old migration user meta (run once per network).
+		if ( ! get_site_option( 'wu_dm_cleanup_done', false ) ) {
+			$this->cleanup_user_meta();
 		}
+
+		// Show a migration notice in network admin to highlight changed filenames
+		// Migration notice intentionally disabled; removed to avoid persistent admin banners.
 		
 		// Register activation/deactivation hooks
 		register_activation_hook( WU_OPENSRS_PLUGIN_FILE, array( $this, 'activate' ) );
 		register_deactivation_hook( WU_OPENSRS_PLUGIN_FILE, array( $this, 'deactivate' ) );
+	}
+
+	/**
+	 * One-time cleanup to remove old per-user migration flags.
+	 * This will run once and set a site option to avoid repeating.
+	 */
+	private function cleanup_user_meta() {
+		if ( ! function_exists( 'get_users' ) ) {
+			return;
+		}
+		$users = get_users( array( 'fields' => 'ID' ) );
+		if ( empty( $users ) ) {
+			update_site_option( 'wu_dm_cleanup_done', 1 );
+			return;
+		}
+		foreach ( $users as $user_id ) {
+			delete_user_meta( $user_id, 'wu_dm_migration_notice_dismissed' );
+		}
+		update_site_option( 'wu_dm_cleanup_done', 1 );
 	}
 	
 	/**
