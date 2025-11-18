@@ -47,7 +47,10 @@ if ( ! defined( 'WU_OPENSRS_PLUGIN_DIR' ) ) {
     define( 'WU_OPENSRS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 }
 if ( ! defined( 'WU_OPENSRS_PLUGIN_URL' ) ) {
-    define( 'WU_OPENSRS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+	define( 'WU_OPENSRS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+}
+if ( ! defined( 'WU_OPENSRS_PLUGIN_BASENAME' ) ) {
+	define( 'WU_OPENSRS_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 }
 // require_once UMS_ADDON_OPENSRS_DOMAIN_MANAGER_PATH . 'includes/class-wu-opensrs-domain-manager.php';
 // WU_OpenSRS_Domain_Manager::get_instance();
@@ -78,6 +81,23 @@ class WU_OpenSRS_Addon {
 			self::$instance = new self();
 		}
 		return self::$instance;
+	}
+
+	/**
+	 * Show migration/admin notice about renamed includes
+	 */
+	public function migration_admin_notice() {
+		if ( ! current_user_can( 'manage_network' ) ) {
+			return;
+		}
+		?>
+		<div class="notice notice-info is-dismissible">
+			<p>
+				<strong><?php esc_html_e( 'Domain Manager migration', 'wu-opensrs' ); ?></strong>
+				<?php esc_html_e( 'Plugin includes were reorganized to use `class-domain-manager-*` filenames. See README for details.', 'wu-opensrs' ); ?>
+			</p>
+		</div>
+		<?php
 	}
 	
 	/**
@@ -129,6 +149,11 @@ class WU_OpenSRS_Addon {
 		
 		// Load required files
 		$this->load_files();
+
+		// Show a migration notice in network admin to highlight changed filenames
+		if ( current_user_can( 'manage_network' ) ) {
+			add_action( 'network_admin_notices', array( $this, 'migration_admin_notice' ) );
+		}
 		
 		// Register activation/deactivation hooks
 		register_activation_hook( WU_OPENSRS_PLUGIN_FILE, array( $this, 'activate' ) );
@@ -143,12 +168,13 @@ class WU_OpenSRS_Addon {
 		require_once WU_OPENSRS_PLUGIN_DIR . 'includes/class-opensrs-api.php';
 		require_once WU_OPENSRS_PLUGIN_DIR . 'includes/class-namecheap-api.php';
 		require_once WU_OPENSRS_PLUGIN_DIR . 'includes/class-domain-provider.php';
-		require_once WU_OPENSRS_PLUGIN_DIR . 'includes/class-opensrs-settings.php';
-		require_once WU_OPENSRS_PLUGIN_DIR . 'includes/class-opensrs-product-type.php';
-		require_once WU_OPENSRS_PLUGIN_DIR . 'includes/class-opensrs-domain-importer.php';
-		require_once WU_OPENSRS_PLUGIN_DIR . 'includes/class-opensrs-pricing.php';
-		require_once WU_OPENSRS_PLUGIN_DIR . 'includes/class-opensrs-renewals.php';
-		require_once WU_OPENSRS_PLUGIN_DIR . 'includes/class-opensrs-checkout.php';
+		// Plugin-level wrappers (provider-agnostic helpers)
+		require_once WU_OPENSRS_PLUGIN_DIR . 'includes/class-domain-manager-settings.php';
+		require_once WU_OPENSRS_PLUGIN_DIR . 'includes/class-domain-manager-product-type.php';
+		require_once WU_OPENSRS_PLUGIN_DIR . 'includes/class-domain-manager-domain-importer.php';
+		require_once WU_OPENSRS_PLUGIN_DIR . 'includes/class-domain-manager-pricing.php';
+		require_once WU_OPENSRS_PLUGIN_DIR . 'includes/class-domain-manager-renewals.php';
+		require_once WU_OPENSRS_PLUGIN_DIR . 'includes/class-domain-manager-checkout.php';
 		require_once WU_OPENSRS_PLUGIN_DIR . 'includes/class-opensrs-customer-dashboard.php';
 		require_once WU_OPENSRS_PLUGIN_DIR . 'includes/class-opensrs-admin-domains.php';
 		

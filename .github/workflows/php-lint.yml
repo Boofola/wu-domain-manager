@@ -1,0 +1,41 @@
+name: PHP Lint
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  php-lint:
+    name: Run php -l on repository
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+
+      - name: Find PHP files and lint
+        run: |
+          set -e
+          echo "Running php -l on all PHP files..."
+          FILES=$(git ls-files '*.php')
+          if [ -z "$FILES" ]; then
+            echo "No PHP files found."
+            exit 0
+          fi
+          EXIT_CODE=0
+          for f in $FILES; do
+            echo "Checking $f"
+            php -l "$f" || EXIT_CODE=1
+          done
+          if [ "$EXIT_CODE" -ne 0 ]; then
+            echo "One or more PHP files contain syntax errors."
+            exit 1
+          fi
+          echo "All PHP files passed php -l"

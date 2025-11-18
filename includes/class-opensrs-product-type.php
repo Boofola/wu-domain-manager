@@ -134,17 +134,15 @@ class WU_OpenSRS_Product_Type {
 					
 					<p class="wu-text-sm wu-text-gray-600">
 						<?php esc_html_e( 'Select which TLDs customers can register with this product. Import TLDs from OpenSRS in Settings → OpenSRS.', 'wu-opensrs' ); ?>
-					</p>
-				</div>
-				
-				<!-- Pricing Model -->
-				<div class="wu-mb-4">
-					<label class="wu-block wu-font-semibold wu-mb-2">
-						<?php esc_html_e( 'Pricing Model', 'wu-opensrs' ); ?>
-					</label>
-					
-					<label class="wu-flex wu-items-center wu-mb-2">
-						<input type="radio" name="wu_opensrs_pricing_model" value="dynamic" <?php checked( $pricing_model, 'dynamic' ); ?> class="wu-mr-2">
+					<?php
+					// Deprecated: migrated to `includes/class-domain-manager-product-type.php`
+					if ( ! defined( 'ABSPATH' ) ) {
+						exit;
+					}
+					// This file has been removed and replaced by the provider-agnostic implementation.
+					// Left as an inert stub to avoid accidental redeclaration during transitional upgrades.
+					return;
+
 						<span><?php esc_html_e( 'Dynamic Pricing (Use OpenSRS prices)', 'wu-opensrs' ); ?></span>
 					</label>
 					

@@ -18,8 +18,7 @@ class WU_OpenSRS_Admin_Domains {
 	}
 	
 	private function __construct() {
-		add_action( 'admin_menu', array( $this, 'add_menu_page' ) );
-		add_action( 'network_admin_menu', array( $this, 'add_menu_page' ) );
+		// Remove menu registration; handled by new Domain Reseller Manager menu.
 	}
 	
 	public function add_menu_page() {
@@ -29,7 +28,7 @@ class WU_OpenSRS_Admin_Domains {
 			'manage_network',
 			'wu-opensrs-domains',
 			array( $this, 'render_domains_page' ),
-			'dashicons-admin-site-alt3',
+			'dashicons-rest-api',
 			30
 		);
 	}
